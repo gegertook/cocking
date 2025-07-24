@@ -12,17 +12,19 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   final _namaController = TextEditingController();
   final _akunController = TextEditingController();
+  final _pwController = TextEditingController();
 
   void _signUp() async {
     final nama = _namaController.text.trim();
     final akun = _akunController.text.trim();
+    final pw = _pwController.text.trim();
 
-    if (nama.isEmpty || akun.isEmpty) return;
+    if (nama.isEmpty || akun.isEmpty || pw.isEmpty) return;
 
     try {
       await Supabase.instance.client
           .from('users')
-          .insert({'nama': nama, 'akun': akun});
+          .insert({'nama': nama, 'akun': akun, 'pw': pw});
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const Homescreen()),
@@ -50,6 +52,11 @@ class _SignUpPageState extends State<SignUpPage> {
               controller: _akunController,
               decoration:
                   const InputDecoration(labelText: 'Akun (username/email)'),
+            ),
+            TextField(
+              controller: _pwController,
+              obscureText: true,
+              decoration: const InputDecoration(labelText: 'Password'),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
